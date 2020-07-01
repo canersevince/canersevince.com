@@ -99,7 +99,8 @@
           });
           if (window.innerWidth > 425) {
             self.isMobile = false
-            anime({
+            setTimeout(() => {
+              anime({
               targets: '.bubbles',
               translateX: function (el) {
                 return el.getAttribute('data-x') - 20;
@@ -128,6 +129,7 @@
               direction: 'alternate',
               loop: false
             });
+            }, 150)
             setTimeout(() => {
               anime({
                 targets: '.bubbles',
@@ -137,7 +139,7 @@
                 direction: 'alternate',
                 loop: true
               });
-            }, 1000)
+            }, 1150)
           }
           setTimeout(() => {
             fx = new typed('#type', {
