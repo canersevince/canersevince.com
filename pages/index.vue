@@ -14,7 +14,7 @@
              @click="msg.indexOf('e-mail') > -1 ? email() : {}" v-for="msg in texts">{{msg}}</p>
         </transition-group>
       </div>
-      <div :data-x="Math.ceil(Math.random()*170)+150" class="bubbles" v-for="bubble in bubbles"><img
+      <div v-if="!isMobile" :data-x="Math.ceil(Math.random()*170)+150" class="bubbles" v-for="bubble in bubbles"><img
         :src="'images/'+bubble.icon+'.png'" alt=""></div>
       <div style="width: 100%" v-if="!animationFinish">
         <div id="type"></div>
@@ -39,6 +39,7 @@
     },
     data() {
       return {
+        isMobile : true,
         animationFinish: false,
         fxOn: {
           green: false,
@@ -96,45 +97,49 @@
             duration: 1000,
             delay: '200ms'
           });
-          anime({
-            targets: '.bubbles',
-            translateX: function (el) {
-              return el.getAttribute('data-x') - 20;
-            },
-            translateY: function (el, i) {
-              return 50 + (-70 * i);
-            },
-            scale: function (el, i, l) {
-              if (i == l - 1) {
-                return 2
-              }
-              return (l - i) + .75;
-            },
-            rotate: function () {
-              return anime.random(-50, 50);
-            },
-            borderRadius: function () {
-              return ['50%', anime.random(10, 35) + '%'];
-            },
-            duration: function () {
-              return anime.random(1200, 1800);
-            },
-            delay: function () {
-              return anime.random(0, 400);
-            },
-            direction: 'alternate',
-            loop: false
-          });
-          setTimeout(() => {
+          if (window.innerWidth > 425) {
+            self.isMobile = false
             anime({
               targets: '.bubbles',
               translateX: function (el) {
-                return el.getAttribute('data-x') - Math.ceil(Math.random() * 5);
+                return el.getAttribute('data-x') - 20;
+              },
+              translateY: function (el, i) {
+                return 50 + (-70 * i);
+              },
+              scale: function (el, i, l) {
+                if (i == l - 1) {
+                  return 2
+                }
+                return (l - i) + .75;
+              },
+              rotate: function () {
+                return anime.random(-50, 50);
+              },
+              borderRadius: function () {
+                return ['50%', anime.random(10, 35) + '%'];
+              },
+              duration: function () {
+                return anime.random(1200, 1800);
+              },
+              delay: function () {
+                return anime.random(0, 400);
               },
               direction: 'alternate',
-              loop: true
+              loop: false
             });
-
+            setTimeout(() => {
+              anime({
+                targets: '.bubbles',
+                translateX: function (el) {
+                  return el.getAttribute('data-x') - Math.ceil(Math.random() * 5);
+                },
+                direction: 'alternate',
+                loop: true
+              });
+            }, 1000)
+          }
+          setTimeout(() => {
             fx = new typed('#type', {
               showCursor: false,
               strings: [...self.strings],
@@ -154,6 +159,7 @@
         })
       }
     }
+
   }
 </script>
 
@@ -409,7 +415,7 @@
       transform: scale(0.7);
     }
     .bubbles {
-      display: none;
+      display: none !important;
     }
   }
 </style>
